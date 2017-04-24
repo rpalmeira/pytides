@@ -2,7 +2,8 @@
 import string
 import operator as op
 import numpy as np
-import nodal_corrections as nc
+from . import nodal_corrections as nc
+from functools import reduce
 
 class BaseConstituent(object):
 	xdo_int = {
@@ -12,7 +13,7 @@ class BaseConstituent(object):
 		'Z': 0
 	}
 
-	int_xdo = {v:k for k, v in xdo_int.items()}
+	int_xdo = {v:k for k, v in list(xdo_int.items())}
 
 	def __init__(self, name, xdo='', coefficients=[], u=nc.u_zero, f=nc.f_unity):
 		if xdo == '':
