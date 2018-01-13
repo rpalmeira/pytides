@@ -1,6 +1,6 @@
 from collections import namedtuple
 import numpy as np
-d2r, r2d = np.pi/180.0, 180.0/np.pi
+
 
 # Most of this is based around Meeus's Astronomical Algorithms, since it
 # presents reasonably good approximations of all the quantities we require in a
@@ -118,39 +118,39 @@ lunar_perigee_coefficients = (
 #Now follow some useful auxiliary values, we won't need their speed.
 #See notes on Table 6 in Schureman for I, nu, xi, nu', 2nu''
 def _I(N, i, omega):
-	N, i, omega = d2r * N, d2r*i, d2r*omega
+	N, i, omega = np.radians(N), np.radians(i), np.radians(omega)
 	cosI = np.cos(i)*np.cos(omega)-np.sin(i)*np.sin(omega)*np.cos(N)
-	return r2d*np.arccos(cosI)
+	return np.degrees(np.arccos(cosI))
 
 def _xi(N, i, omega):
-	N, i, omega = d2r * N, d2r*i, d2r*omega
+	N, i, omega = np.radians(N), np.radians(i), np.radians(omega)
 	e1 = np.cos(0.5*(omega-i))/np.cos(0.5*(omega+i)) * np.tan(0.5*N)
 	e2 = np.sin(0.5*(omega-i))/np.sin(0.5*(omega+i)) * np.tan(0.5*N)
 	e1, e2 = np.arctan(e1), np.arctan(e2)
 	e1, e2 = e1 - 0.5*N, e2 - 0.5*N
-	return -(e1 + e2)*r2d
+	return np.degrees(-(e1 + e2))
 
 def _nu(N, i, omega):
-	N, i, omega = d2r * N, d2r*i, d2r*omega
+	N, i, omega = np.radians(N), np.radians(i), np.radians(omega)
 	e1 = np.cos(0.5*(omega-i))/np.cos(0.5*(omega+i)) * np.tan(0.5*N)
 	e2 = np.sin(0.5*(omega-i))/np.sin(0.5*(omega+i)) * np.tan(0.5*N)
 	e1, e2 = np.arctan(e1), np.arctan(e2)
 	e1, e2 = e1 - 0.5*N, e2 - 0.5*N
-	return (e1 - e2)*r2d
+	return np.degrees((e1 - e2))
 
 #Schureman equation 224
 #Can we be more precise than B "the solar coefficient" = 0.1681?
 def _nup(N, i, omega):
-	I = d2r * _I(N, i, omega)
-	nu = d2r * _nu(N, i, omega)
-	return r2d * np.arctan(np.sin(2*I)*np.sin(nu)/(np.sin(2*I)*np.cos(nu)+0.3347))
+	I = np.radians(_I(N, i, omega))
+	nu = np.radians(_nu(N, i, omega))
+	return np.degrees(np.arctan(np.sin(2*I)*np.sin(nu)/(np.sin(2*I)*np.cos(nu)+0.3347)))
 
 #Schureman equation 232
 def _nupp(N, i, omega):
-	I = d2r * _I(N, i, omega)
-	nu = d2r * _nu(N, i, omega)
+	I = np.radians(_I(N, i, omega))
+	nu = np.radians(_nu(N, i, omega))
 	tan2nupp = (np.sin(I)**2*np.sin(2*nu))/(np.sin(I)**2*np.cos(2*nu)+0.0727)
-	return r2d * 0.5 * np.arctan(tan2nupp)
+	return np.degrees(0.5 * np.arctan(tan2nupp))
 
 AstronomicalParameter = namedtuple('AstronomicalParameter', ['value', 'speed'])
 
