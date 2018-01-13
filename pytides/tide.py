@@ -2,15 +2,15 @@
 from collections import OrderedDict, Iterable
 from itertools import takewhile, count
 try:
-	from itertools import izip, ifilter
+	from itertools import izip, ifilter	
 except ImportError: #Python3
 	izip = zip
 	ifilter = filter
 from datetime import datetime, timedelta
 import numpy as np
 from scipy.optimize import leastsq, fsolve
-from astro import astro
-import constituent
+from .astro import astro
+from . import constituent
 
 d2r, r2d = np.pi/180.0, 180.0/np.pi
 
@@ -112,7 +112,7 @@ class Tide(object):
 
 		return np.concatenate([
 			Tide._tidal_series(t_i, H, p, speed, u_i, f_i, V0)
-			for t_i, u_i, f_i in izip(t, u, f)
+			for t_i, u_i, f_i in zip(t, u, f)
 		])
 
 	def highs(self, *args):
@@ -121,7 +121,7 @@ class Tide(object):
 		Arguments:
 		see Tide.extrema()
 		"""
-		for t in ifilter(lambda e: e[2] == 'H', self.extrema(*args)):
+		for t in filter(lambda e: e[2] == 'H', self.extrema(*args)):
 			yield t
 
 	def lows(self, *args):
@@ -130,7 +130,7 @@ class Tide(object):
 		Arguments:
 		see Tide.extrema()
 		"""
-		for t in ifilter(lambda e: e[2] == 'L', self.extrema(*args)):
+		for t in filter(lambda e: e[2] == 'L', self.extrema(*args)):
 			yield t
 
 	def form_number(self):
@@ -188,7 +188,7 @@ class Tide(object):
 			amplitude = self.model['amplitude'][:, np.newaxis]
 			phase     = d2r*self.model['phase'][:, np.newaxis]
 
-			for start, end in izip(*partitions):
+			for start, end in zip(*partitions):
 				speed, [u], [f], V0 = self.prepare(start, Tide._times(start, 0.5*partition))
 				#These derivatives don't include the time dependence of u or f,
 				#but these change slowly.
@@ -201,7 +201,7 @@ class Tide(object):
 				intervals = (
 					delta * i -offset for i in range(interval_count)), (delta*(i+1) - offset for i in range(interval_count)
 				)
-				for a, b in izip(*intervals):
+				for a, b in zip(*intervals):
 					if d(a)*d(b) < 0:
 						extrema = fsolve(d, (a + b) / 2.0, fprime = d2)[0]
 						time = Tide._times(start, extrema)
@@ -353,7 +353,7 @@ class Tide(object):
 			H, p = hp[:n, np.newaxis], hp[n:, np.newaxis]
 			s = np.concatenate([
 				Tide._tidal_series(t_i, H, p, speed, u_i, f_i, V0)
-				for t_i, u_i, f_i in izip(t, u, f)
+				for t_i, u_i, f_i in zip(t, u, f)
 			])
 			res = heights - s
 			if callback:
@@ -367,12 +367,12 @@ class Tide(object):
 			H, p = hp[:n, np.newaxis], hp[n:, np.newaxis]
 			ds_dH = np.concatenate([
 				f_i*np.cos(speed*t_i+u_i+V0-p)
-				for t_i, u_i, f_i in izip(t, u, f)],
+				for t_i, u_i, f_i in zip(t, u, f)],
 				axis = 1)
 
 			ds_dp = np.concatenate([
 				H*f_i*np.sin(speed*t_i+u_i+V0-p)
-				for t_i, u_i, f_i in izip(t, u, f)],
+				for t_i, u_i, f_i in zip(t, u, f)],
 				axis = 1)
 
 			return np.append(-ds_dH, -ds_dp, axis=0)

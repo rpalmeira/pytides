@@ -171,7 +171,7 @@ def astro(t):
 	#Polynomials are in T, that is Julian Centuries; we want our speeds to be
 	#in the more convenient unit of degrees per hour.
 	dT_dHour = 1 / (24 * 365.25 * 100)
-	for name, coefficients in polynomials.items():
+	for name, coefficients in list(polynomials.items()):
 		a[name] = AstronomicalParameter(
 				np.mod(polynomial(coefficients, T(t)), 360.0),
 				d_polynomial(coefficients, T(t)) * dT_dHour
@@ -181,13 +181,13 @@ def astro(t):
 	#parameters N, i, omega for use in node factor calculations. We don't need
 	#their speeds.
 	args = list(each.value for each in [a['N'], a['i'], a['omega']])
-	for name, function in {
+	for name, function in list({
 		'I':    _I,
 		'xi':   _xi,
 		'nu':   _nu,
 		'nup':  _nup,
 		'nupp': _nupp
-	}.items():
+	}.items()):
 		a[name] = AstronomicalParameter(np.mod(function(*args), 360.0), None)
 
 	#We don't work directly with the T (hours) parameter, instead our spanning
