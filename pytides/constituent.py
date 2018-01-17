@@ -87,10 +87,10 @@ class CompoundConstituent(BaseConstituent):
 
 # # # # # #  Base Constituents
 # Long Term
-_Z0 = BaseConstituent(name = 'Z0', xdo = 'Z ZZZ ZZZ', u = nc.u_zero, f = nc.f_unity)
-_Sa = BaseConstituent(name = 'Sa', xdo = 'Z ZAZ ZZZ', u = nc.u_zero, f = nc.f_unity)
-_Ssa = BaseConstituent(name = 'Ssa', xdo = 'Z ZBZ ZZZ', u = nc.u_zero, f = nc.f_unity)
-_Mm = BaseConstituent(name = 'Mm', xdo = 'Z AZY ZZZ', u = nc.u_zero, f = nc.f_Mm)
+_Z0 = BaseConstituent(name = 'Z0', xdo = 'Z ZZZ ZZZ' )
+_Sa = BaseConstituent(name = 'Sa', xdo = 'Z ZAZ ZZZ' )
+_Ssa = BaseConstituent(name = 'Ssa', xdo = 'Z ZBZ ZZZ')
+_Mm = BaseConstituent(name = 'Mm', xdo = 'Z AZY ZZZ', f = nc.f_Mm)
 _Mf = BaseConstituent(name = 'Mf', xdo = 'Z BZZ ZZZ', u = nc.u_Mf, f = nc.f_Mf)
 
 # Diurnals
@@ -105,8 +105,8 @@ _J1 = BaseConstituent(name = 'J1', xdo = 'A BZY ZZY', u = nc.u_J1, f = nc.f_J1)
 # again here.
 
 _M1 = BaseConstituent(name = 'M1', xdo = 'A ZZZ ZZA', u = nc.u_M1, f = nc.f_M1)
-_P1 = BaseConstituent(name = 'P1', xdo = 'A AXZ ZZA', u = nc.u_zero, f = nc.f_unity)
-_S1 = BaseConstituent(name = 'S1', xdo = 'A AYZ ZZZ', u = nc.u_zero, f = nc.f_unity)
+_P1 = BaseConstituent(name = 'P1', xdo = 'A AXZ ZZA')
+_S1 = BaseConstituent(name = 'S1', xdo = 'A AYZ ZZZ')
 _OO1 = BaseConstituent(name = 'OO1', xdo = 'A CZZ ZZY', u = nc.u_OO1, f = nc.f_OO1)
 
 # Semi-Diurnals
@@ -116,15 +116,16 @@ _nu2 = BaseConstituent(name = 'nu2', xdo = 'B YBY ZZZ', u = nc.u_M2, f = nc.f_M2
 _M2 = BaseConstituent(name = 'M2', xdo = 'B ZZZ ZZZ', u = nc.u_M2, f = nc.f_M2)
 _lambda2 = BaseConstituent(name = 'lambda2', xdo = 'B AXA ZZB', u = nc.u_M2, f = nc.f_M2)
 _L2 = BaseConstituent(name = 'L2', xdo = 'B AZY ZZB', u = nc.u_L2, f = nc.f_L2)
-_T2 = BaseConstituent(name = 'T2', xdo = 'B BWZ ZAZ', u = nc.u_zero, f = nc.f_unity)
-_S2 = BaseConstituent(name = 'S2', xdo = 'B BXZ ZZZ', u = nc.u_zero, f = nc.f_unity)
-_R2 = BaseConstituent(name = 'R2', xdo = 'B BYZ ZYB', u = nc.u_zero, f = nc.f_unity)
+_T2 = BaseConstituent(name = 'T2', xdo = 'B BWZ ZAZ')
+_S2 = BaseConstituent(name = 'S2', xdo = 'B BXZ ZZZ')
+_R2 = BaseConstituent(name = 'R2', xdo = 'B BYZ ZYB')
 _K2 = BaseConstituent(name = 'K2', xdo = 'B BZZ ZZZ', u = nc.u_K2, f = nc.f_K2)
 
 # Third-Diurnals
 ufunc = lambda a:nc.u_Modd(a,3)
 ffunc = lambda a:nc.f_Modd(a,3)
 _M3 = BaseConstituent(name = 'M3', xdo = 'C ZZZ ZZZ', u = ufunc, f = ffunc)
+
 
 # # # # # #  Compound Constituents
 # Long Term
@@ -138,16 +139,19 @@ _rho1 = CompoundConstituent(name = 'rho1', members = [(_nu2, 1), (_K1, -1)])
 
 _mu2 = CompoundConstituent(name = 'mu2', members = [(_M2, 2), (_S2, -1)]) # 2MS2
 _2SM2 = CompoundConstituent(name = '2SM2', members = [(_S2, 2), (_M2, -1)])
+_MNS2 = CompoundConstituent(name = 'MNS2', members = [(_S2, -1), (_M2, 1), (_N2, 1)])
 
 # Third-Diurnal
 _2MK3 = CompoundConstituent(name = '2MK3', members = [(_M2, 1), (_O1, 1)])
 _MK3 = CompoundConstituent(name = 'MK3', members = [(_M2, 1), (_K1, 1)])
+_MO3 = CompoundConstituent(name = 'MO3',  members = [(_M2, 1), (_O1, 1)]) #(?)
 
 # Quarter-Diurnal
 _MN4 = CompoundConstituent(name = 'MN4', members = [(_M2, 1), (_N2, 1)])
 _M4 = CompoundConstituent(name = 'M4', members = [(_M2, 2)])
 _MS4 = CompoundConstituent(name = 'MS4', members = [(_M2, 1), (_S2, 1)])
 _S4 = CompoundConstituent(name = 'S4', members = [(_S2, 2)])
+_SN4 = CompoundConstituent(name = 'SN4', ,members = [(_S2, 1), (_N2, 1)])
 
 # Sixth-Diurnal
 _M6 = CompoundConstituent(name = 'M6', members = [(_M2, 3)])
@@ -161,5 +165,5 @@ noaa = [
 	_M2, _S2, _N2, _K1, _M4, _O1, _M6, _MK3, _S4, _MN4, _nu2, _S6, _mu2,
 	_2N2, _OO1, _lambda2, _S1, _M1, _J1, _Mm, _Ssa, _Sa, _MSF, _Mf,
 	_rho1, _Q1, _T2, _R2, _2Q1, _P1, _2SM2, _M3, _L2, _2MK3, _K2,
-	_M8, _MS4
+	_M8, _MS4, _MO3, _SN4, _MNS2
 ]
