@@ -12,7 +12,7 @@ from scipy.optimize import leastsq, fsolve
 from .astro import astro
 from . import constituent
 
-d2r, r2d = np.pi/180.0, 180.0/np.pi
+
 
 class Tide(object):
 	dtype = np.dtype([
@@ -57,7 +57,7 @@ class Tide(object):
 			raise ValueError("Must be initialised with constituents, \
 			amplitudes and phases; or a model.")
 		if radians:
-			model['phase'] = r2d*model['phase']
+			model['phase'] = np.degrees(model['phase'])
 		self.model = model[:]
 		self.normalize()
 
@@ -107,9 +107,9 @@ class Tide(object):
 			 ]
 
 		if radians:
-			speed = d2r*speed
-			V0 = d2r*V0
-			u = [d2r*each for each in u]
+			speed = np.radians(speed)
+			V0 = np.radians(V0)
+			u = [np.radians(each) for each in u]
 		return speed, u, f, V0
 
 	def at(self, t):
@@ -125,7 +125,7 @@ class Tide(object):
 		times = self._times(t0, [(i + 0.5)*partition for i in range(len(t))])
 		speed, u, f, V0 = self.prepare(t0, times, radians = True)
 		H = self.model['amplitude'][:, np.newaxis]
-		p = d2r*self.model['phase'][:, np.newaxis]
+		p = np.radians(self.model['phase'][:, np.newaxis])
 
 		return np.concatenate([
 			Tide._tidal_series(t_i, H, p, speed, u_i, f_i, V0)
@@ -204,15 +204,17 @@ class Tide(object):
 			# We search for stationary points from offset hours before t0 to
 			# ensure we find any which might occur very soon after t0.
 			offset = 24.0
-			partitions =
-				(Tide._times(t0, i*partition) for i in count()),
-				(Tide._times(t0, i*partition) for i in count(1))
+			partitions =(Tide._times(t0, i*partition)
+						for i in count()
+						),(Tide._times(t0, i*partition)
+						for i in count(1)
+						)
 
 			# We'll overestimate to be on the safe side;
 			# values outside (start,end) won't get yielded.
 			interval_count = int(np.ceil((partition + offset) / delta)) + 1
 			amplitude = self.model['amplitude'][:, np.newaxis]
-			phase     = d2r*self.model['phase'][:, np.newaxis]
+			phase     = np.radians(self.model['phase'][:, np.newaxis])
 
 			for start, end in zip(*partitions):
 				speed, [u], [f], V0 = self.prepare(
@@ -232,8 +234,11 @@ class Tide(object):
 									axis=0)
 				# We'll overestimate to be on the safe side;
 				# values outside (start,end) won't get yielded.
-				intervals = (delta * i -offset for i in range(interval_count)),
-					(delta*(i+1) - offset for i in range(interval_count))
+				intervals = (
+					delta * i -offset for i in range(interval_count)
+					),(
+					delta*(i+1) - offset for i in range(interval_count)
+					)
 				for a, b in zip(*intervals):
 					if d(a)*d(b) < 0:
 						extrema = fsolve(d, (a + b) / 2.0, fprime = d2)[0]
@@ -435,7 +440,7 @@ class Tide(object):
 				for i, c in enumerate(constituents):
 					if c0 == c:
 						amplitudes[i] = amplitude
-						phases[i] = d2r*phase
+						phases[i] = np.radians((phase))
 
 		initial = np.append(amplitudes, phases)
 
