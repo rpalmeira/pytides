@@ -97,7 +97,7 @@ _Mf = BaseConstituent(name = 'Mf', xdo = 'Z BZZ ZZZ', u = nc.u_Mf, f = nc.f_Mf)
 _Q1 = BaseConstituent(name = 'Q1', xdo = 'A XZA ZZA', u = nc.u_O1, f = nc.f_O1)
 _O1 = BaseConstituent(name = 'O1', xdo = 'A YZZ ZZA', u = nc.u_O1, f = nc.f_O1)
 _K1 = BaseConstituent(name = 'K1', xdo = 'A AZZ ZZY', u = nc.u_K1, f = nc.f_K1)
-_J1 = BaseConstituent(name = 'J1', xdo = 'A BZY ZZY', u = nc.u_J1, f = nc.f_J1)
+_J1 = BaseConstituent(name = 'J1', xdo = 'A BZY ZZY', u = nc.u_J1, f = nc.f_J1) #?
 
 # M1 is a tricky business for reasons of convention, rather than theory.  The
 # reasons for this are best summarised by Schureman paragraphs 126, 127 and in
@@ -130,15 +130,16 @@ _M3 = BaseConstituent(name = 'M3', xdo = 'C ZZZ ZZZ', u = ufunc, f = ffunc)
 # # # # # #  Compound Constituents
 # Long Term
 _MSF = CompoundConstituent(name = 'MSF', members = [(_S2, 1), (_M2, -1)])
+_MSTM = CompoundConstituent(name = 'MSTM', members = [(_Mf, 2), (_Mm, -1)])
 
 # Diurnal
 _2Q1 = CompoundConstituent(name = '2Q1', members = [(_N2, 1), (_J1, -1)])
 _rho1 = CompoundConstituent(name = 'rho1', members = [(_nu2, 1), (_K1, -1)])
 
 # Semi-Diurnal
-
 _mu2 = CompoundConstituent(name = 'mu2', members = [(_M2, 2), (_S2, -1)]) # 2MS2
 _2SM2 = CompoundConstituent(name = '2SM2', members = [(_S2, 2), (_M2, -1)])
+_OP2 = CompoundConstituent(name = 'OP2', members = [(_P1, 1), (_O1, 	1)])
 _MNS2 = CompoundConstituent(name = 'MNS2', members = [(_S2, -1), (_M2, 1), (_N2, 1)])
 
 # Third-Diurnal
@@ -151,7 +152,11 @@ _MN4 = CompoundConstituent(name = 'MN4', members = [(_M2, 1), (_N2, 1)])
 _M4 = CompoundConstituent(name = 'M4', members = [(_M2, 2)])
 _MS4 = CompoundConstituent(name = 'MS4', members = [(_M2, 1), (_S2, 1)])
 _S4 = CompoundConstituent(name = 'S4', members = [(_S2, 2)])
+_N4 = CompoundConstituent(name = 'N4', members = [(_N2, 2)])
+_L4 = CompoundConstituent(name = 'L4', members = [(_L2, 2)])
 _SN4 = CompoundConstituent(name = 'SN4', ,members = [(_S2, 1), (_N2, 1)])
+_MK4 = CompoundConstituent(name = 'MK4', ,members = [(_M2, 1), (_K2, 1)])
+_2MSN4 = CompoundConstituent(name = '2MSN4', members = [(_S2, 1), (_M2, 2), (_N2, -1)])
 
 # Sixth-Diurnal
 _M6 = CompoundConstituent(name = 'M6', members = [(_M2, 3)])
@@ -159,11 +164,32 @@ _S6 = CompoundConstituent(name = 'S6', members = [(_S2, 3)])
 
 # Eighth-Diurnals
 _M8 = CompoundConstituent(name = 'M8', members = [(_M2, 4)])
+_S8 = CompoundConstituent(name = 'S8', members = [(_S2, 4)])
+
+# Tenth-Diurnals
+_M10 = CompoundConstituent(name = 'M10', members = [(_M2, 5)])
+
+# Twelveth-Diurnals
+_M12 = CompoundConstituent(name = 'M12', members = [(_M2, 6)])
 
 
 noaa = [
-	_M2, _S2, _N2, _K1, _M4, _O1, _M6, _MK3, _S4, _MN4, _nu2, _S6, _mu2,
-	_2N2, _OO1, _lambda2, _S1, _M1, _J1, _Mm, _Ssa, _Sa, _MSF, _Mf,
-	_rho1, _Q1, _T2, _R2, _2Q1, _P1, _2SM2, _M3, _L2, _2MK3, _K2,
-	_M8, _MS4, _MO3, _SN4, _MNS2
+	_M2, _S2, _N2, _K1, _M4, _O1, _M6, _MK3, _S4, _MN4, _nu2, _S6, _mu2, _2N2,
+	_OO1, _lambda2, _S1, _M1, _J1, _Mm, _Ssa, _Sa, _MSF, _Mf,	_rho1, _Q1, _T2,
+	_R2, _2Q1, _P1, _2SM2, _M3, _L2, _2MK3, _K2 ,_M8, _MS4, _MO3, _SN4, _MNS2,
+	_N4, _L4, _M10, _M12, _S8, _MK4, _OP2,_2MSN4, _MSTM,
 ]
+#
+#  u'RO1', u'SIGMA1', u'PI1',
+# u'FI1', u'CHI1', u'THETA1', u'SO1', u'MP1', u'PSI1',
+# , u'KJ2', u'MSN2', u'MKS2', u'OQ2',
+# u'SK3', u'SO3', u'SK4', u'2MS6', u'2MN6',
+# u'2SM6', u'MSN6', u'2MK6', u'MSK6', u'SK2', u'S3',
+#  u'MSM', u'MTM', u'MSQM', u'M(SK)2', u'M(KS)2',
+# u'3MS8', u'2(MS)8', u'2MSN8', u'2MNS4', u'3MK4', u'3MS4', u'2MSK4',
+# u'2MKS4', u'3MN4', u'2SMK4', u'2MSN4', u'MNK6', u'MSNK8', u'2SNM4',
+# u'SP3', u'KQ1', u'MQ3', u'K3', u'3SM4', u'2SN2', u'2SN6',
+# , u'NO1', u'2MS2', u'ALP1', u'EPS2', u'ETA2', u'UPS1',
+# u'2MN2', u'3MK7', u'2MK5', u'2SK5', u'TAU1', u'H1', u'H2', u'4MS6',
+# u'MQM', u'SIG1', u'M11', u'KI1', u'PHI1', u'TTA1', u'E2',
+# u'2MK2', u'MSK2', u'LA2', u'A0', u'3MN8', u'2MSK8'
